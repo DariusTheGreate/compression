@@ -1,0 +1,3 @@
+Kotovshikov alghorithm:
+	using vectors for each of symbolUnits lead to cashe misses (?)
+	better way to store codes
