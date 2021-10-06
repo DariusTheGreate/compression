@@ -8,17 +8,18 @@ Code HuffmanTree::push(std::string symbol) {
 		code_res += '1';
 	}
 	if (temp->left == nullptr) {
-		temp->left = new Node(symbol);
+		temp->left = new(buffer + buffer_offset++) Node(symbol);
 		code_res += '0';
 		std::cout << symbol << " -> " << code_res << "\n";
 	}
 
 	else if (temp->right == nullptr && temp->left != nullptr) {
-		temp->right = new Node(symbol);
+		temp->right = new(buffer + buffer_offset++) Node(symbol);
 		code_res += '1';
 		std::cout << symbol << " -> " << code_res << "\n";
 	}
 
+	std::cout << "buffer -> " << buffer_offset << "\n";
 	return Code(code_res.c_str());
 }
 
@@ -46,7 +47,7 @@ void HuffmanTree::push_skeleton() {
 	while (temp->right != nullptr) {
 		temp = temp->right;
 	}
-
-	temp->right = new Node("*");
+	std::cout << buffer_offset << "\n";
+	temp->right = new(buffer + buffer_offset++) Node("*");
 
 }

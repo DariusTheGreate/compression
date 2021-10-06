@@ -21,11 +21,10 @@ public:
 	std::string compress(const std::string& text_to_compress);
 
 private:
-	
 	std::string get_alphabet(const std::string& text);
-
 	void build_codes(const std::string& sorted_alphabet);
 
+private:
 	std::vector<std::pair<char, int>> sort(const std::map<char, int>& M);
 
 	std::map<char, int> codes;
