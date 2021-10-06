@@ -7,7 +7,7 @@ public:
 		symbol = symbol_in;
 	}
 
-	char get_symbol(){
+	char get_symbol() const{
 		return symbol;
 	}
 

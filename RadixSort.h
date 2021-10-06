@@ -7,51 +7,61 @@ template<typename Arr, size_t len>
 class RadixSort
 {
 public:
-	RadixSort(Arr* array_in) : array(array_in){
-		radixsort();
+	RadixSort(Arr* array_in, int len) : arr(array_in){
+        quickSortIterative(0, len-1);
 	}
 
 private:
-	Arr* array;
-	int getMax(Arr& arr)
-	{
-		int mx = arr[0];
-		for (int i = 1; i < len; i++)
-			if (arr[i] > mx)
-				mx = arr[i];
-		return mx;
-	}
+	Arr* arr;
 
-	void countSort(Arr& arr, int exp)
-	{
-		int output[len]; // output array
-		int i, count[10] = { 0 };
+    void swap(Arr* a, Arr* b)
+    {
+        Arr t = *a;
+        *a = *b;
+        *b = t;
+    }
 
-		for (i = 0; i < len; i++)
-			count[(arr[i] / exp) % 10]++;
+    Arr partition(int l, int h)
+    {
+        Arr x = arr[h];
+        Arr i = (l - 1);
 
-		for (i = 1; i < 10; i++)
-			count[i] += count[i - 1];
+        for (int j = l; j <= h - 1; j++) {
+            if (arr[j] <= x) {
+                i++;
+                swap(&arr[i], &arr[j]);
+            }
+        }
+        swap(&arr[i + 1], &arr[h]);
+        return (i + 1);
+    }
 
-		for (i = len - 1; i >= 0; i--) {
-			output[count[(arr[i] / exp) % 10] - 1] = arr[i];
-			count[(arr[i] / exp) % 10]--;
-		}
-		for (i = 0; i < len; i++)
-			arr[i] = output[i];
-	}
+    void quickSortIterative(int l, int h)
+    {
+        int stack[len];
 
-	void radixsort()
-	{
-		int m = getMax(*array);
+        int top = -1;
 
-		for (int exp = 1; m / exp > 0; exp *= 10)
-			countSort(*array, exp);
-		
-		for (size_t i = 0; i < len; ++i) {
-			std::cout << (*array)[i] << " ";
-		}
-	}
+        stack[++top] = l;
+        stack[++top] = h;
+
+        while (top >= 0) {
+            h = stack[top--];
+            l = stack[top--];
+
+            Arr p = partition(l, h);
+
+            if (--p > l) {
+                stack[++top] = l;
+                stack[++top] = p - 1;
+            }
+
+            if (++p < h) {
+                stack[++top] = p + 1;
+                stack[++top] = h;
+            }
+        }
+    }
 };
 
 #endif

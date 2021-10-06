@@ -13,6 +13,7 @@ public:
 	TextCompressionManager(const std::string& file_path_in) : file_path(file_path_in), stream{file_path_in} {
 		handle_fail_error(file_path_in);
 		handle_bad_error(file_path_in);
+        stream.open(file_path.c_str());
 	    algo = Algo(build_string());
 	}
 
@@ -39,22 +40,18 @@ private:
 
 template<typename Algo>
 std::string TextCompressionManager<Algo>::read_line() {
-    std::string line;
-    std::getline(this->stream, line);
-    return line;
+    //std::string line;
+    //std::getline(this->stream, line);
+    //return line;
+    std::stringstream strStream;
+    strStream << stream.rdbuf();
+    std::string str = strStream.str();
+    return str;
 }
 
 template<typename Algo>
 std::string TextCompressionManager<Algo>::build_string() {
-    std::ifstream inFile;
-    
-    inFile.open(file_path.c_str()); 
-
-    std::stringstream strStream;
-    strStream << inFile.rdbuf(); 
-    std::string str = strStream.str(); 
-    std::string res = "aaaaabbbbccdde";
-    return res;
+    return read_line();
 }
 
 template<typename Algo>

@@ -8,29 +8,33 @@
 
 #include "ISymbol.h"
 
+
 class LzwSymbol : public ISymbol{
 public:
-	LzwSymbol(char symbol_in) : ISymbol(symbol_in) {}
+	LzwSymbol(char symbol_in) noexcept : ISymbol(symbol_in) {}
+	LzwSymbol(const LzwSymbol& symbol_in) noexcept : ISymbol(symbol_in.get_symbol()) {}
 };
 
 
 class LzwSymbolUnit{
 public:
-	LzwSymbolUnit(const LzwSymbol& symbol_in){
+	LzwSymbolUnit(const LzwSymbol& symbol_in) noexcept;
+	LzwSymbolUnit(const std::string& str) noexcept;
+	LzwSymbolUnit(const LzwSymbolUnit& unit_in);
+	LzwSymbolUnit(const char symbol_in[1]) noexcept;
+	LzwSymbolUnit(LzwSymbolUnit&& unit_in) noexcept;
 
-	}
+	LzwSymbolUnit& operator =(const char symbol_in[1]) noexcept;
+	LzwSymbolUnit& operator =(const LzwSymbolUnit& unit_in) noexcept;
+	LzwSymbolUnit& operator =(LzwSymbolUnit&& unit_in) noexcept;
+	LzwSymbolUnit& operator +=(const char& unit_in) noexcept;
 
-	void append_symbol(const LzwSymbol& symbol_in){
-		symbols.emplace_back(symbol_in);
-	}
+	bool operator <(const LzwSymbolUnit& unit_in) const noexcept;
 
-	void print_symbols(){
-		std::cout << "state -> ";
-		for(auto& s: symbols){
-			std::cout << s.get_symbol() << " ";
-		}
-		std::cout << "\n";
-	}
+	std::string build_string_from_symbols() const noexcept;
+	std::vector<LzwSymbol> get_symbols() const noexcept;
+	void append_symbol(const LzwSymbol& symbol_in) noexcept;
+	void print_symbols() const noexcept;
 
 private:
 	std::vector<LzwSymbol> symbols;
@@ -39,97 +43,33 @@ private:
 
 class LZWCompressor{
 public:
-	LZWCompressor() = default;
+	LZWCompressor() noexcept = default;
+	LZWCompressor(const std::string& text) noexcept;
 
-	LZWCompressor(const std::string& text) {
-		build_alphabet(std::move(get_occurance(text)));
-	}
-
-	void compress(const std::string& str){
-		std::cout << "string is: " << str << "\n";
-		std::string w = "";
-		w += str[0];
-		std::vector<int> res_code;
-		for(size_t i = 1; i < str.size(); ++i){
-			std::string prev = w;
-			w += str[i];
-			if(state.find(w) == state.end()){
-				res_code.push_back(state[prev]);
-				state[w] = state_code++;
-				w = "";
-				i--;
-			}
-		}
-		res_code.push_back(state[w]);
-		std::cout << "alphabet is: \n";
-		for(auto s: state){
-			std::cout << "\t" << s.first << " " << s.second << "\n";
-		}
-
-		std::cout << "\n";
-		for(size_t i = 0; i < res_code.size(); ++i){
-			std::cout << res_code[i] << " ";
-		}
-
-		std::cout << "\n";
-	}
+	std::string compress(const std::string& str) noexcept;
 
 private:
-	
-	std::string get_occurance(const std::string& text) {
-		std::map<char, int> occurances;
-		for (size_t i = 0; i < text.size(); ++i) {
-			occurances[(char)text[i]]++;
-		}
-		std::string res = "";
-		for (auto& o : occurances) {
-			res += o.first;
-		}
-		res += "\0";
+	std::string get_occurance(const std::string& text) noexcept;
+	void build_alphabet(const std::string& alphabet) noexcept;
 
-		return res;
-	}
-
-	void build_alphabet(const std::string& alphabet) {
-		for (size_t i = 0; i < alphabet.size(); ++i) {
-			std::string s = "";
-			s += alphabet[i];
-			state[s] = state_code++;
-			//std::cout << s << " " << state[s] << "\n";
-		}
-	}
-
-	std::map<std::string, int> state;
+private:
+	std::map<LzwSymbolUnit, int> state;
 	size_t state_code = 0;
 };
 
 
 class LZWDecompressor{
 public:
-	LZWDecompressor(const std::string& text) {
+	LZWDecompressor(const std::string& text) noexcept{
 		build_alphabet(text);
 	}
 
-	void decompress(const std::vector<std::string>& coded_str){
-		std::string pos = "";
-		pos += coded_str[0];
-		for(size_t i = 1; i < coded_str.size(); ++i){
-
-		}
-	}
+	void decompress(const std::vector<std::string>& coded_str);
 
 private:
+	void build_alphabet(const std::string& alphabet) noexcept;
 
-	void build_alphabet(const std::string& alphabet) {
-		for (size_t i = 0; i < alphabet.size(); ++i) {
-			std::string s = "";
-			s += alphabet[i];
-			state[s] = state_code++;
-			//std::cout << s << " " << state[s] << "\n";
-		}
-	}
-
-
+private:
 	std::map<std::string, std::string> state;
 	size_t state_code = 0;
 };
