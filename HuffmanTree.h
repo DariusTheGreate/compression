@@ -15,6 +15,16 @@ public:
 
 	}
 
+	~HuffmanTree() {
+		for (size_t i = 0; i < buffer_offset; ++i) {
+			buffer[i].~Node();
+			//std::cout << "node destroyed\n";
+		}
+
+		char* buffer_to_delete = reinterpret_cast<char*>(buffer);
+		delete[] buffer_to_delete;
+	}
+
 	Code push(std::string symbol);
 	
 	void print() const;
