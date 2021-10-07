@@ -23,6 +23,7 @@ public:
 
 		char* buffer_to_delete = reinterpret_cast<char*>(buffer);
 		delete[] buffer_to_delete;
+		delete head;
 	}
 
 	Code push(std::string symbol);
