@@ -22,9 +22,14 @@ KotovshikovSymbol KotovshikovSymbolUnit::get_symbol(const int& i) {
 void KotovshikovSymbolUnit::print_symbols() {
 	std::cout << "state -> ";
 	for (auto& s : symbols) {
-		std::cout << s.get_symbol() << "/" << s.get_code().get_code() << " ";
+		std::cout << s.get_symbol() << "/" << s.get_code().get_str_code() << " ";
 	}
 	std::cout << "\n";
+}
+
+std::vector<KotovshikovSymbol> KotovshikovSymbolUnit::get_codes() const
+{
+	return symbols;
 }
 
 void KotovshikovSymbolUnit::update_codes(const short& i) {
@@ -35,13 +40,22 @@ void KotovshikovSymbolUnit::update_codes(const short& i) {
 }
 
 
-std::string KotovshikovCompressor::compress(const std::string& text) {
-	return "";
+std::vector<Code> KotovshikovCompressor::compress(const std::string& text) {
+	std::vector<Code> res;
+
+	for (size_t i = 0; i < text.size(); ++i) {
+		//res = res + codes[text_to_compress[i]].get_str_code();
+		res.push_back(codes[text[i]]);
+	}
+	//std::cout << res;
+	//std::cout << "SIZE IS " << sizeof(res) << "\n";
+
+	return res;
 }
 
 std::string KotovshikovCompressor::sort_symbols(const std::string& text) {
 
-	std::cout << text << "\n";
+	//std::cout << text << "\n";
 	std::map<char, int> occurance;
 
 	int c = 0;
@@ -59,7 +73,7 @@ std::string KotovshikovCompressor::sort_symbols(const std::string& text) {
 			res += vec[i].first;
 	}
 	res += '\0';
-	std::cout << res << "\n";
+	//std::cout << res << "\n";
 	return res;
 }
 
@@ -78,7 +92,7 @@ std::vector<std::pair<char, int>> KotovshikovCompressor::sort(const std::map<cha
 	}
 
 	std::sort(A.begin(), A.end(), [](std::pair<char, int>& a, std::pair<char, int>& b) {
-		return a.first < b.first;
+		return a.first > b.first;
 		});
 
 	return A;
@@ -113,7 +127,21 @@ void KotovshikovCompressor::build_codes() {
 		counter++;
 		d += 2;
 	}
+	
+	state[0].update_codes(1);
+	
+	auto first_partition_codes = state[0].get_codes();
+	auto second_partition_codes = state[state.size() - 2].get_codes();
+	
+	for (auto& i : first_partition_codes) {
+		codes[i.get_symbol()] = i.get_code();
+	}
 
-	state[0].print_symbols();
-	state[state.size() - 1].print_symbols();
+	for (auto& i : second_partition_codes) {
+		codes[i.get_symbol()] = i.get_code();
+	}
+	
+	for (auto& i : codes) {
+		std::cout << i.first << " " << i.second.get_code() << "\n";
+	}
 }

@@ -40,6 +40,8 @@ public:
 
 	void print_symbols();
 
+	std::vector<KotovshikovSymbol> get_codes() const;
+
 private:
 	std::vector<KotovshikovSymbol> symbols;
 };
@@ -49,12 +51,13 @@ public:
 	KotovshikovCompressor() = default;
 	
 	KotovshikovCompressor(const std::string& text) {
+		std::cout << "\nSIZE IN " << (text.size() * sizeof(std::string::value_type)) << " \n";
 		build_state(std::move(sort_symbols(text)));
 		build_codes();
-		compress(text);
+		//compress(text);
 	}
 
-	std::string compress(const std::string& text);
+	std::vector<Code> compress(const std::string& text);
 
 private:
 	std::string sort_symbols(const std::string& text);
@@ -68,6 +71,8 @@ private:
 	void build_codes();
 
 	std::vector<KotovshikovSymbolUnit> state;
+
+	std::map<char, Code> codes;
 };
 
 #endif

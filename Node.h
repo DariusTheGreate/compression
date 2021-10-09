@@ -13,9 +13,8 @@ public:
 
 	Node(const std::string& symbol_in) : symbol(symbol_in), left(nullptr), right(nullptr) {
 	}
-
-
-
+	
+	//make it stored together
 	Node* left;
 	Node* right;
 public:

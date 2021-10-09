@@ -3,16 +3,29 @@
 
 #include <string>
 
+#include <bitset>
+
+//use bitset here, or something
+
 class Code{
 public:
+	Code() = default;
+
 	Code(const char* str_code) : code(str_code) {} 
 	
 	Code operator +(const Code& code_in);
 
-	std::string get_code();
+	void append_at_the_end(const std::bitset<8>& str) {
+		code.to_string() += str.to_string();
+	}
+
+	std::string get_str_code() const;
+
+	std::bitset<4> get_code() const;
 
 private:
-	std::string code;
+	std::bitset<4> code;
+
 };
 
 #endif

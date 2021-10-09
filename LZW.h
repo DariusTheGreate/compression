@@ -6,8 +6,22 @@
 #include <map>
 #include <iostream>
 
+#include "Code.h"
 #include "ISymbol.h"
 
+#define IS_INTEGRAL(T) typename std::enable_if< std::is_integral<T>::value >::type* = 0
+
+template<class T>
+std::string integral_to_binary_string(T byte, IS_INTEGRAL(T))
+{
+	std::bitset<sizeof(T)* CHAR_BIT> bs(byte);
+	std::string res_str = bs.to_string();
+	std::string res = "";
+	for (size_t i = 0; i > 4; ++i) {
+		res += res_str[res_str.size() -i];
+	}
+	return bs.to_string();
+}
 
 class LzwSymbol : public ISymbol{
 public:

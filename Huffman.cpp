@@ -2,7 +2,6 @@
 
 
 std::string HuffmanCompressor::get_alphabet(const std::string& text) {
-	std::cout << text << "\n";
 	std::map<char, int> occurance;
 
 	int c = 0;
@@ -24,21 +23,20 @@ std::string HuffmanCompressor::get_alphabet(const std::string& text) {
 }
 
 void HuffmanCompressor::build_codes(const std::string& sorted_alphabet) {
-	std::cout << "str: " << sorted_alphabet << "\n";
 	HuffmanTree huffman(sorted_alphabet.size());
+	
 	for (size_t i = 0; i < sorted_alphabet.size() - 1; ++i) {
 		std::string to_push = "";
 		to_push += sorted_alphabet.c_str()[i];
-		huffman.push(to_push);
-		std::cout << "\n\n";
+		Code code = huffman.push(to_push);
+		codes[to_push.c_str()[0]] = code;
 	}
 
-	huffman.print();
+	print_codes();
 }
 
 std::vector<std::pair<char, int>> HuffmanCompressor::sort(const std::map<char, int>& M)
 {
-
 	std::vector<std::pair<char, int> > A;
 
 	for (auto& it : M) {
@@ -47,11 +45,28 @@ std::vector<std::pair<char, int>> HuffmanCompressor::sort(const std::map<char, i
 
 	std::sort(A.begin(), A.end(), [](std::pair<char, int>& a, std::pair<char, int>& b) {
 		return a.first < b.first;
-		});
+	});
 
 	return A;
 }
 
-std::string HuffmanCompressor::compress(const std::string& text_to_compress) {
-	return "s";
+std::vector<Code> HuffmanCompressor::compress(const std::string& text_to_compress) {
+	std::vector<Code> res;
+
+	for (size_t i = 0; i < text_to_compress.size(); ++i) {
+		//res = res + codes[text_to_compress[i]].get_str_code();
+		res.push_back(codes[text_to_compress[i]]);
+	}
+	//std::cout << res;
+	//std::cout << "SIZE IS " << sizeof(res) << "\n";
+
+	return res;
+}
+
+void HuffmanCompressor::print_codes() const
+{
+	for (auto i: codes) {
+		std::cout << i.first << " " << i.second.get_str_code() << " ";
+	}
+	std::cout << "\n";
 }

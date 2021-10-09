@@ -15,7 +15,7 @@ public:
     string() {
   }
 
-  String(const char* s) : //for "String string{"hello"}" init
+  String(const char* s) : 
     string{s} {
   }
 
