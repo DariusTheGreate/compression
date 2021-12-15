@@ -14,7 +14,6 @@ class HuffmanTree
 public:
 	HuffmanTree(const size_t& alphabet_len) noexcept : head(new Node("h")), buffer(reinterpret_cast<Node*>(new char[sizeof(Node) * (alphabet_len*2)])) {
 		build_skeleton(std::move(alphabet_len - 3));
-
 	}
 
 	~HuffmanTree();
@@ -28,6 +27,7 @@ private:
 	void push_skeleton();
 
 private:
+	//HEAP "OPTIMISATION". Its, bassicly, allocator buffer. 
 	Node* buffer = nullptr;
 	size_t buffer_offset = 0;
 	Node* head = nullptr;

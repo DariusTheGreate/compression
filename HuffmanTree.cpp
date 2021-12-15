@@ -12,6 +12,7 @@ HuffmanTree::~HuffmanTree() {
 }
 
 Code HuffmanTree::push(const std::string& symbol) {
+#define _PRINT_CODES_
 	Node* temp = head;
 	std::string code_res = "";
 	while (temp->left != nullptr && temp->right != nullptr) {
@@ -21,13 +22,17 @@ Code HuffmanTree::push(const std::string& symbol) {
 	if (temp->left == nullptr) {
 		temp->left = new(buffer + buffer_offset++) Node(symbol);
 		code_res += '0';
-		//std::cout << symbol << " -> " << code_res << "\n";
+#ifdef _PRINT_CODES_
+		std::cout << symbol << " -> " << code_res << "\n";
+#endif
 	}
 
 	else if (temp->right == nullptr && temp->left != nullptr) {
 		temp->right = new(buffer + buffer_offset++) Node(symbol);
 		code_res += '1';
-		//std::cout << symbol << " -> " << code_res << "\n";
+#ifdef _PRINT_CODES_
+		std::cout << symbol << " -> " << code_res << "\n";
+#endif
 	}
 
 	//std::cout << "buffer -> " << buffer_offset << "\n";
@@ -41,7 +46,7 @@ void HuffmanTree::print() const {
 void HuffmanTree::printer(Node* temp) const {
 	if (temp == nullptr)
 		return;
-	//std::cout << temp->symbol << "\n";
+	std::cout << temp->symbol << "\n";
 	printer(temp->left);
 	printer(temp->right);
 }

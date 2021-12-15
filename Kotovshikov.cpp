@@ -53,6 +53,11 @@ std::vector<Code> KotovshikovCompressor::compress(const std::string& text) {
 	return res;
 }
 
+std::string&& KotovshikovCompressor::decompress(const std::string& text)
+{
+	return "not implemented yet\n";
+}
+
 std::string KotovshikovCompressor::sort_symbols(const std::string& text) {
 
 	//std::cout << text << "\n";
@@ -127,12 +132,12 @@ void KotovshikovCompressor::build_codes() {
 		counter++;
 		d += 2;
 	}
-	
+
 	state[0].update_codes(1);
-	
+
 	auto first_partition_codes = state[0].get_codes();
 	auto second_partition_codes = state[state.size() - 2].get_codes();
-	
+
 	for (auto& i : first_partition_codes) {
 		codes[i.get_symbol()] = i.get_code();
 	}
@@ -140,7 +145,7 @@ void KotovshikovCompressor::build_codes() {
 	for (auto& i : second_partition_codes) {
 		codes[i.get_symbol()] = i.get_code();
 	}
-	
+
 	for (auto& i : codes) {
 		std::cout << i.first << " " << i.second.get_code() << "\n";
 	}

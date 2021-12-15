@@ -2,10 +2,7 @@
 #define _CODE_
 
 #include <string>
-
 #include <bitset>
-
-//use bitset here, or something
 
 class Code{
 public:
@@ -25,7 +22,6 @@ public:
 
 private:
 	std::bitset<4> code;
-
 };
 
 #endif

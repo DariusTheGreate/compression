@@ -11,6 +11,7 @@
 #include "Node.h"
 #include "HuffmanTree.h"
 
+#include "CompressionAlgorithm.h"
 
 class HuffmanSymbol : public ISymbol {
 public:
@@ -30,26 +31,23 @@ private:
 	std::vector<HuffmanSymbol> symbols;
 };
 
-class HuffmanCompressor
+class HuffmanCompressor : CompressionAlgorithm
 {
 public:
-	HuffmanCompressor() noexcept = default;
+	HuffmanCompressor() = default;
 	HuffmanCompressor(const std::string& text) noexcept {
-		//std::cout << "\n" << text << "\n";
-		std::cout << "\nSIZE IN " << (text.size() * sizeof(std::string::value_type)) << " ";
+		std::cout << "\nTEXT IN: " << text << "\n";
 		build_codes(std::move(get_alphabet(text)));
-		//compress(text);
 	}
 
 	std::vector<Code> compress(const std::string& text_to_compress);
+	std::string&& decompress(const std::string& text);
 
 	void print_codes() const;
 
 private:
 	std::string get_alphabet(const std::string& text);
 	void build_codes(const std::string& sorted_alphabet);
-
-private:
 	std::vector<std::pair<char, int>> sort(const std::map<char, int>& M);
 
 	std::map<char, Code> codes;

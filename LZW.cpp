@@ -89,7 +89,7 @@ LZWCompressor::LZWCompressor(const std::string& text) noexcept {
 	compress(text);
 }
 
-std::string LZWCompressor::compress(const std::string& str) noexcept {
+std::vector<Code> LZWCompressor::compress(const std::string& str) noexcept {
 	//std::cout << "string is: " << str << "\n";
 	auto w = std::string("");
 	w += str[0];
@@ -109,12 +109,12 @@ std::string LZWCompressor::compress(const std::string& str) noexcept {
 	//std::cout << "alphabet is: \n";
 
 	//std::cout << "\n";
-	//std::vector<Code> res;
-	std::string res = "";
+	std::vector<Code> res;
+	//std::string res = "";
 	for (size_t i = 0; i < res_code.size(); ++i) {
-		//std::cout << res_code[i] << " ";
+		std::cout << res_code[i] << " ";
 		std::string r = integral_to_binary_string(res_code[i]);
-		res += r;
+		//res += r;
 		//std::cout << r << "\n";
 		//res.emplace_back(std::move(Code(r.c_str())));
 	}

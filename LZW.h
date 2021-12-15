@@ -8,6 +8,7 @@
 
 #include "Code.h"
 #include "ISymbol.h"
+#include "CompressionAlgorithm.h"
 
 #define IS_INTEGRAL(T) typename std::enable_if< std::is_integral<T>::value >::type* = 0
 
@@ -30,7 +31,7 @@ public:
 };
 
 
-class LzwSymbolUnit{
+class LzwSymbolUnit {
 public:
 	LzwSymbolUnit(const LzwSymbol& symbol_in) noexcept;
 	LzwSymbolUnit(const std::string& str) noexcept;
@@ -55,12 +56,12 @@ private:
 };
 
 
-class LZWCompressor{
+class LZWCompressor : CompressionAlgorithm {
 public:
 	LZWCompressor() noexcept = default;
 	LZWCompressor(const std::string& text) noexcept;
 
-	std::string compress(const std::string& str) noexcept;
+	std::vector<Code> compress(const std::string& str) noexcept;
 
 private:
 	std::string get_occurance(const std::string& text) noexcept;
